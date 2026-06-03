@@ -1,0 +1,5 @@
+
+Admin path is at: /admin/products
+Admin credentials are: (admin@jager.ee, admin123)
+
+Adding an image to a product can be done through the admin panel.

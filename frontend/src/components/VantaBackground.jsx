@@ -26,7 +26,7 @@ export default function VantaBackground() {
   return (
     <div
       ref={el}
-      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.35 }}
     />
   );
 }

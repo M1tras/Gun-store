@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
+import OrderStatusTimeline from '../components/OrderStatusTimeline';
+import { SkeletonOrderCard } from '../components/SkeletonCard';
 
 const ORANGE = '#f0a500';
 const SURFACE = '#141414';
 const BORDER = '#2a2a2a';
 
-const STATUS = {
-  pending:   { color: ORANGE,     label: 'Pending' },
-  confirmed: { color: '#64b5f6',  label: 'Confirmed' },
-  shipped:   { color: '#4fc3f7',  label: 'Shipped' },
-  delivered: { color: '#81c784',  label: 'Delivered' },
-  cancelled: { color: '#e57373',  label: 'Cancelled' },
+const STATUS_COLOR = {
+  pending:   ORANGE,
+  confirmed: '#64b5f6',
+  shipped:   '#4fc3f7',
+  delivered: '#81c784',
+  cancelled: '#e57373',
 };
 
 export default function OrdersPage() {
@@ -26,7 +28,6 @@ export default function OrdersPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p style={{ color: '#666', padding: '2rem 0' }}>Loading orders…</p>;
   if (error) return <p style={{ color: '#e74c3c' }}>{error}</p>;
 
   return (
@@ -36,14 +37,18 @@ export default function OrdersPage() {
         <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800 }}>My Orders</h2>
       </div>
 
-      {orders.length === 0 ? (
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {[1, 2, 3].map(i => <SkeletonOrderCard key={i} />)}
+        </div>
+      ) : orders.length === 0 ? (
         <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '3rem 2rem', textAlign: 'center', color: '#555' }}>
           <p style={{ margin: 0 }}>You haven&apos;t placed any orders yet.</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {orders.map((order) => {
-            const st = STATUS[order.status] || { color: '#666', label: order.status };
+            const color = STATUS_COLOR[order.status] || '#666';
             return (
               <div key={order.id} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden' }}>
                 {/* Header */}
@@ -53,17 +58,11 @@ export default function OrdersPage() {
                     <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#eee' }}>#{order.id}</span>
                   </div>
                   <span style={{
-                    fontSize: '0.62rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: st.color,
-                    border: `1px solid ${st.color}33`,
-                    background: `${st.color}11`,
-                    borderRadius: '3px',
-                    padding: '0.2rem 0.55rem',
+                    fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color, border: `1px solid ${color}33`, background: `${color}11`,
+                    borderRadius: '3px', padding: '0.2rem 0.55rem',
                   }}>
-                    {st.label}
+                    {order.status}
                   </span>
                   <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#fff' }}>€{parseFloat(order.totalPrice).toFixed(2)}</span>
@@ -71,6 +70,11 @@ export default function OrdersPage() {
                       {new Date(order.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}
                     </span>
                   </div>
+                </div>
+
+                {/* Timeline */}
+                <div style={{ borderBottom: `1px solid ${BORDER}` }}>
+                  <OrderStatusTimeline status={order.status} />
                 </div>
 
                 {/* Items */}

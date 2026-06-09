@@ -10,13 +10,13 @@ export default function VantaBackground() {
     effect.current = NET({
       el: el.current,
       THREE,
-      color: 0x3a2800,
+      color: 0xf0a500,
       backgroundColor: 0x0d0d0d,
-      points: 10,
+      points: 7,
       maxDistance: 20,
       spacing: 16,
       showDots: false,
-      speed: 0.4,
+      speed: 0.1,
       mouseControls: false,
       touchControls: false,
       gyroControls: false,
@@ -27,7 +27,7 @@ export default function VantaBackground() {
   return (
     <div
       ref={el}
-      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.35 }}
+      style={{ position: 'fixed', top: '-10%', left: '-10%', width: '120%', height: '120%', zIndex: 0, pointerEvents: 'none', opacity: 0.35 }}
     />
   );
 }

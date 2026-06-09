@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import SwipeToRemove from '../components/SwipeToRemove';
+import EmptyState, { EmptyCart } from '../components/EmptyState';
 import api from '../api/axios';
 
 const ORANGE = '#f0a500';
@@ -53,13 +54,12 @@ export default function CartPage() {
           <div style={{ fontSize: '0.6rem', letterSpacing: '0.2em', color: ORANGE, textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.2rem' }}>Jager</div>
           <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800 }}>Your Loadout</h2>
         </div>
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '3rem 2rem', textAlign: 'center' }}>
-          <div style={{ color: '#333', fontSize: '2rem', marginBottom: '1rem' }}>◫</div>
-          <p style={{ color: '#555', margin: '0 0 1.25rem' }}>Your loadout is empty.</p>
-          <Link to="/products" style={{ color: ORANGE, fontWeight: 700, fontSize: '0.82rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
-            Browse Arsenal →
-          </Link>
-        </div>
+        <EmptyState
+          icon={<EmptyCart />}
+          title="Loadout empty"
+          description="Add items from the arsenal to start building your order."
+          action={<Link to="/products" style={{ color: ORANGE, fontWeight: 700, fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>Browse Arsenal →</Link>}
+        />
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import OrderStatusTimeline from '../components/OrderStatusTimeline';
 import { SkeletonOrderCard } from '../components/SkeletonCard';
+import EmptyState, { EmptyOrders } from '../components/EmptyState';
 
 const ORANGE = '#f0a500';
 const SURFACE = '#141414';
@@ -42,9 +43,7 @@ export default function OrdersPage() {
           {[1, 2, 3].map(i => <SkeletonOrderCard key={i} />)}
         </div>
       ) : orders.length === 0 ? (
-        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '3rem 2rem', textAlign: 'center', color: '#555' }}>
-          <p style={{ margin: 0 }}>You haven&apos;t placed any orders yet.</p>
-        </div>
+        <EmptyState icon={<EmptyOrders />} title="No orders yet" description="Your order history will appear here after your first purchase." />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {orders.map((order) => {

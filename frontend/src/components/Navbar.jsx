@@ -96,9 +96,14 @@ export default function Navbar() {
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {user?.role === 'admin' && (
-            <Link to="/admin/products" style={{ color: ORANGE, fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}>
-              Admin
-            </Link>
+            <>
+              <Link to="/admin/products" style={{ color: ORANGE, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}>
+                Products
+              </Link>
+              <Link to="/admin/orders" style={{ color: ORANGE, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}>
+                Orders
+              </Link>
+            </>
           )}
           {user && (
             <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: MUTED, fontSize: '0.75rem', cursor: 'pointer', letterSpacing: '0.05em', textTransform: 'uppercase', padding: 0 }}>

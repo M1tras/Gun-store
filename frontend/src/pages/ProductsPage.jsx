@@ -4,6 +4,7 @@ import api from '../api/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { SkeletonCard } from '../components/SkeletonCard';
+import EmptyState, { EmptyProducts } from '../components/EmptyState';
 
 const ORANGE = '#f0a500';
 const SURFACE = '#141414';
@@ -51,7 +52,7 @@ export default function ProductsPage() {
         {loading
           ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
           : products.length === 0
-            ? <p style={{ color: '#555', gridColumn: '1/-1' }}>No products available yet.</p>
+            ? <div style={{ gridColumn: '1/-1' }}><EmptyState icon={<EmptyProducts />} title="Arsenal empty" description="No products have been added yet." /></div>
             : products.map((p) => {
                 const hovered = hoveredId === p.id;
                 return (

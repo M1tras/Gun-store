@@ -16,6 +16,7 @@ export default function VantaBackground() {
       maxDistance: 20,
       spacing: 16,
       showDots: false,
+      speed: 0.4,
       mouseControls: false,
       touchControls: false,
       gyroControls: false,

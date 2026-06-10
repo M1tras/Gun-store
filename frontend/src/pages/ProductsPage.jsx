@@ -19,6 +19,7 @@ export default function ProductsPage() {
   const [error, setError] = useState('');
   const [hoveredId, setHoveredId] = useState(null);
   const [justAdded, setJustAdded] = useState({});
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     api
@@ -36,24 +37,65 @@ export default function ProductsPage() {
     showToast('success', `"${product.name}" added to loadout`);
   };
 
+  const filtered = query.trim()
+    ? products.filter(p =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.description?.toLowerCase().includes(query.toLowerCase())
+      )
+    : products;
+
   if (error) return <p style={{ color: '#e74c3c' }}>{error}</p>;
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <div>
           <div style={{ fontSize: '0.6rem', letterSpacing: '0.2em', color: ORANGE, textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.2rem' }}>Jager</div>
           <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.01em' }}>Arsenal</h2>
         </div>
-        {!loading && <span style={{ fontSize: '0.75rem', color: '#555', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{products.length} items</span>}
+        {!loading && <span style={{ fontSize: '0.75rem', color: '#555', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{filtered.length} items</span>}
+      </div>
+
+      {/* Search bar */}
+      <div style={{ position: 'relative', marginBottom: '1.25rem' }}>
+        <svg style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+          width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search arsenal…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.65rem 2.5rem 0.65rem 2.4rem',
+            background: SURFACE,
+            border: `1px solid ${query ? 'rgba(240,165,0,0.35)' : BORDER}`,
+            borderRadius: '6px',
+            color: '#eee',
+            fontSize: '0.88rem',
+            outline: 'none',
+            transition: 'border-color 0.2s',
+            boxSizing: 'border-box',
+          }}
+        />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: 0 }}
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.85rem' }}>
         {loading
           ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-          : products.length === 0
-            ? <div style={{ gridColumn: '1/-1' }}><EmptyState icon={<EmptyProducts />} title="Arsenal empty" description="No products have been added yet." /></div>
-            : products.map((p) => {
+          : filtered.length === 0
+            ? <div style={{ gridColumn: '1/-1' }}><EmptyState icon={<EmptyProducts />} title={query ? 'No results' : 'Arsenal empty'} description={query ? `Nothing matched "${query}". Try a different term.` : 'No products have been added yet.'} /></div>
+            : filtered.map((p) => {
                 const hovered = hoveredId === p.id;
                 return (
                   <Link

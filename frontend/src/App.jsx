@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 import Navbar from './components/Navbar';
+import VantaBackground from './components/VantaBackground';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -29,6 +30,8 @@ function AdminRoute({ children }) {
 export default function App() {
   return (
     <>
+      <VantaBackground />
+      <div style={{ position: 'relative', zIndex: 1 }}>
       <Navbar />
       <main style={{ maxWidth: '960px', margin: '0 auto', padding: '1.25rem 1rem 80px' }}>
         <Routes>
@@ -57,6 +60,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+      </div>
     </>
   );
 }

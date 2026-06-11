@@ -12,7 +12,7 @@ export default function VantaBackground() {
       THREE,
       color: 0x3a2800,
       backgroundColor: 0x0d0d0d,
-      points: 14,
+      points: 10,
       maxDistance: 20,
       spacing: 16,
       showDots: false,

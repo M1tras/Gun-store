@@ -10,12 +10,15 @@ export default function VantaBackground() {
     effect.current = NET({
       el: el.current,
       THREE,
-      color: 0xf0a500,
+      color: 0x3a2800,
       backgroundColor: 0x0d0d0d,
-      points: 10,
-      maxDistance: 22,
-      spacing: 18,
-      showDots: true,
+      points: 7,
+      maxDistance: 18,
+      spacing: 22,
+      showDots: false,
+      mouseControls: false,
+      touchControls: false,
+      gyroControls: false,
     });
     return () => effect.current?.destroy();
   }, []);

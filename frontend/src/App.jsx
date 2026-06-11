@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 import Navbar from './components/Navbar';
@@ -29,12 +29,13 @@ function AdminRoute({ children }) {
 }
 
 export default function App() {
+  const location = useLocation();
   return (
     <>
       <VantaBackground />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Navbar />
-        <main style={{ maxWidth: '960px', margin: '0 auto', padding: '1.25rem 1rem 80px' }}>
+        <main key={location.key} style={{ maxWidth: '960px', margin: '0 auto', padding: '1.25rem 1rem 80px', animation: 'page-in 0.2s ease both' }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

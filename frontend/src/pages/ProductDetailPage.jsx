@@ -108,7 +108,7 @@ export default function ProductDetailPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -125,6 +125,17 @@ export default function ProductDetailPage() {
   }, [id]);
 
   const handleAddToCart = () => {
+    const inCart = items.find((i) => i.productId === product.id)?.quantity || 0;
+    const available = product.stock - inCart;
+    if (quantity > available) {
+      setMessage({
+        type: 'error',
+        text: available === 0
+          ? `No more "${product.name}" available — you already have the full stock in your cart.`
+          : `Only ${available} more available for "${product.name}" (${inCart} already in cart).`,
+      });
+      return;
+    }
     addItem(product, quantity);
     setMessage({ type: 'success', text: `Added ${quantity} × "${product.name}" to cart.` });
   };
@@ -136,7 +147,9 @@ export default function ProductDetailPage() {
   if (fetchError) return <p style={{ color: '#c0392b' }}>{fetchError}</p>;
   if (!product) return null;
 
-  const outOfStock = product.stock === 0;
+  const cartQty = items.find((i) => i.productId === product.id)?.quantity || 0;
+  const availableStock = product.stock - cartQty;
+  const outOfStock = availableStock === 0;
   const purchaseBlocked = product.isRestricted && (!user || !canBuyRestricted);
 
   return (
@@ -161,10 +174,16 @@ export default function ProductDetailPage() {
 
           <div style={s.price}>€{parseFloat(product.price).toFixed(2)}</div>
           <div style={s.stock}>
-            {outOfStock ? (
+            {product.stock === 0 ? (
               <span style={{ color: '#c0392b', fontWeight: 600 }}>Out of stock</span>
+            ) : outOfStock ? (
+              <span style={{ color: '#c0392b', fontWeight: 600 }}>
+                All {product.stock} in stock are in your cart
+              </span>
             ) : (
-              <span>{product.stock} in stock</span>
+              <span>
+                {availableStock} in stock{cartQty > 0 && ` (${cartQty} already in cart)`}
+              </span>
             )}
           </div>
 
@@ -200,9 +219,11 @@ export default function ProductDetailPage() {
                 style={s.qtyInput}
                 type="number"
                 min="1"
-                max={product.stock}
+                max={availableStock}
                 value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                onChange={(e) =>
+                  setQuantity(Math.min(Math.max(1, parseInt(e.target.value) || 1), availableStock))
+                }
               />
             </div>
           )}

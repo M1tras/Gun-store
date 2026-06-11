@@ -12,17 +12,15 @@ import OrdersPage from './pages/OrdersPage';
 import CartPage from './pages/CartPage';
 import AdminProductsPage from './pages/AdminProductsPage';
 
-// Route guard: redirects to /login if not authenticated
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div style={{ padding: '2rem' }}>Loading...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: '#aaa' }}>Loading...</div>;
   return user ? children : <Navigate to="/login" replace />;
 }
 
-// Route guard: redirects to / if not admin
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div style={{ padding: '2rem' }}>Loading...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: '#aaa' }}>Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/" replace />;
   return children;
@@ -32,7 +30,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '1.5rem 1rem' }}>
+      <main style={{ maxWidth: '960px', margin: '0 auto', padding: '1.25rem 1rem 80px' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

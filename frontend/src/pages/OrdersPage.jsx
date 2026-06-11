@@ -1,62 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 
-const STATUS_COLORS = {
-  pending: { bg: '#fff8e1', color: '#856404' },
-  confirmed: { bg: '#d1ecf1', color: '#0c5460' },
-  shipped: { bg: '#cce5ff', color: '#004085' },
-  delivered: { bg: '#d4edda', color: '#155724' },
-  cancelled: { bg: '#f8d7da', color: '#721c24' },
-};
+const ORANGE = '#f0a500';
+const SURFACE = '#141414';
+const BORDER = '#2a2a2a';
 
-const s = {
-  orderCard: {
-    background: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-    marginBottom: '1rem',
-    overflow: 'hidden',
-  },
-  orderHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1rem 1.25rem',
-    borderBottom: '1px solid #f0f0f0',
-    flexWrap: 'wrap',
-    gap: '0.5rem',
-  },
-  orderId: { fontWeight: 700, fontSize: '0.95rem' },
-  statusBadge: (status) => ({
-    padding: '0.2rem 0.6rem',
-    borderRadius: '3px',
-    fontSize: '0.8rem',
-    fontWeight: 600,
-    textTransform: 'uppercase',
-    ...(STATUS_COLORS[status] || { bg: '#eee', color: '#555' }),
-    background: (STATUS_COLORS[status] || {}).bg,
-    color: (STATUS_COLORS[status] || {}).color,
-  }),
-  total: { fontWeight: 700 },
-  itemsList: { padding: '0.75rem 1.25rem', listStyle: 'none', margin: 0 },
-  item: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0.4rem 0',
-    borderBottom: '1px solid #f8f8f8',
-    fontSize: '0.9rem',
-  },
-  restrictedTag: {
-    background: '#fff3cd',
-    color: '#856404',
-    border: '1px solid #ffc107',
-    borderRadius: '3px',
-    padding: '0.1rem 0.3rem',
-    fontSize: '0.7rem',
-    marginLeft: '0.35rem',
-  },
-  meta: { color: '#888', fontSize: '0.8rem' },
+const STATUS = {
+  pending:   { color: ORANGE,     label: 'Pending' },
+  confirmed: { color: '#64b5f6',  label: 'Confirmed' },
+  shipped:   { color: '#4fc3f7',  label: 'Shipped' },
+  delivered: { color: '#81c784',  label: 'Delivered' },
+  cancelled: { color: '#e57373',  label: 'Cancelled' },
 };
 
 export default function OrdersPage() {
@@ -72,48 +26,73 @@ export default function OrdersPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Loading orders…</p>;
-  if (error) return <p style={{ color: '#c0392b' }}>{error}</p>;
+  if (loading) return <p style={{ color: '#666', padding: '2rem 0' }}>Loading orders…</p>;
+  if (error) return <p style={{ color: '#e74c3c' }}>{error}</p>;
 
   return (
     <div>
-      <h2 style={{ marginTop: 0 }}>My Orders</h2>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ fontSize: '0.6rem', letterSpacing: '0.2em', color: ORANGE, textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.2rem' }}>Jager</div>
+        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800 }}>My Orders</h2>
+      </div>
 
       {orders.length === 0 ? (
-        <p style={{ color: '#888' }}>You haven&apos;t placed any orders yet.</p>
+        <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '3rem 2rem', textAlign: 'center', color: '#555' }}>
+          <p style={{ margin: 0 }}>You haven&apos;t placed any orders yet.</p>
+        </div>
       ) : (
-        orders.map((order) => (
-          <div key={order.id} style={s.orderCard}>
-            <div style={s.orderHeader}>
-              <span style={s.orderId}>Order #{order.id}</span>
-              <span style={s.statusBadge(order.status)}>{order.status}</span>
-              <span style={s.total}>€{parseFloat(order.totalPrice).toFixed(2)}</span>
-              <span style={s.meta}>
-                {new Date(order.createdAt).toLocaleDateString('en-GB', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </span>
-            </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {orders.map((order) => {
+            const st = STATUS[order.status] || { color: '#666', label: order.status };
+            return (
+              <div key={order.id} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', overflow: 'hidden' }}>
+                {/* Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.9rem 1.1rem', borderBottom: `1px solid ${BORDER}`, flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <div>
+                    <span style={{ fontSize: '0.65rem', color: '#444', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Order </span>
+                    <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#eee' }}>#{order.id}</span>
+                  </div>
+                  <span style={{
+                    fontSize: '0.62rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    color: st.color,
+                    border: `1px solid ${st.color}33`,
+                    background: `${st.color}11`,
+                    borderRadius: '3px',
+                    padding: '0.2rem 0.55rem',
+                  }}>
+                    {st.label}
+                  </span>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#fff' }}>€{parseFloat(order.totalPrice).toFixed(2)}</span>
+                    <span style={{ fontSize: '0.72rem', color: '#444' }}>
+                      {new Date(order.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                </div>
 
-            <ul style={s.itemsList}>
-              {order.OrderItems?.map((item) => (
-                <li key={item.id} style={s.item}>
-                  <span>
-                    {item.Product?.name || `Product #${item.productId}`}
-                    {item.Product?.isRestricted && (
-                      <span style={s.restrictedTag}>RESTRICTED</span>
-                    )}
-                  </span>
-                  <span style={{ color: '#555' }}>
-                    {item.quantity} × €{parseFloat(item.unitPrice).toFixed(2)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
+                {/* Items */}
+                <div style={{ padding: '0.75rem 1.1rem' }}>
+                  {order.OrderItems?.map((item) => (
+                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.45rem 0', borderBottom: `1px solid #1a1a1a`, fontSize: '0.82rem' }}>
+                      <span style={{ color: '#aaa' }}>
+                        {item.Product?.name || `Product #${item.productId}`}
+                        {item.Product?.isRestricted && (
+                          <span style={{ color: ORANGE, fontSize: '0.62rem', marginLeft: '0.4rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>· Restricted</span>
+                        )}
+                      </span>
+                      <span style={{ color: '#555', flexShrink: 0, marginLeft: '1rem' }}>
+                        {item.quantity} × €{parseFloat(item.unitPrice).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

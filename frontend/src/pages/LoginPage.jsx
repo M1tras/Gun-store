@@ -3,47 +3,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-const s = {
-  wrapper: {
-    maxWidth: '400px',
-    margin: '2rem auto',
-    background: '#fff',
-    borderRadius: '8px',
-    padding: '2rem',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-  },
-  title: { marginTop: 0, marginBottom: '1.5rem' },
-  field: { marginBottom: '1rem' },
-  label: { display: 'block', marginBottom: '0.35rem', fontWeight: 500, fontSize: '0.9rem' },
-  input: {
-    width: '100%',
-    padding: '0.55rem 0.75rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '1rem',
-  },
-  btn: {
-    width: '100%',
-    padding: '0.7rem',
-    background: '#1a1a1a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-    marginTop: '0.5rem',
-  },
-  error: {
-    background: '#fdecea',
-    border: '1px solid #f5c6cb',
-    borderRadius: '4px',
-    padding: '0.6rem 0.75rem',
-    color: '#721c24',
-    marginBottom: '1rem',
-    fontSize: '0.9rem',
-  },
-  footer: { marginTop: '1rem', fontSize: '0.9rem', textAlign: 'center', color: '#555' },
+const ORANGE = '#f0a500';
+const SURFACE = '#141414';
+const BORDER = '#2a2a2a';
+
+const inputStyle = {
+  width: '100%',
+  padding: '0.7rem 0.85rem',
+  background: '#0d0d0d',
+  border: `1px solid ${BORDER}`,
+  borderRadius: '4px',
+  fontSize: '0.95rem',
+  color: '#eee',
+  outline: 'none',
+};
+
+const labelStyle = {
+  display: 'block',
+  marginBottom: '0.4rem',
+  fontWeight: 700,
+  fontSize: '0.65rem',
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  color: '#666',
 };
 
 export default function LoginPage() {
@@ -62,7 +44,6 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const { data } = await api.post('/api/auth/login', form);
       saveSession(data);
@@ -75,47 +56,52 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={s.wrapper}>
-      <h2 style={s.title}>Sign In</h2>
+    <div style={{ maxWidth: '380px', margin: '2rem auto' }}>
+      <div style={{ marginBottom: '1.75rem' }}>
+        <div style={{ fontSize: '0.6rem', letterSpacing: '0.2em', color: ORANGE, textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.3rem' }}>Jager</div>
+        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Sign In</h2>
+      </div>
 
-      {error && <div style={s.error}>{error}</div>}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1.75rem' }}>
+        {error && (
+          <div style={{ borderLeft: '3px solid #e74c3c', paddingLeft: '0.75rem', marginBottom: '1.25rem', fontSize: '0.82rem', color: '#e74c3c' }}>
+            {error}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} noValidate>
-        <div style={s.field}>
-          <label style={s.label} htmlFor="email">Email</label>
-          <input
-            style={s.input}
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            autoComplete="email"
-          />
-        </div>
+        <form onSubmit={handleSubmit} noValidate>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={labelStyle} htmlFor="email">Email</label>
+            <input style={inputStyle} id="email" name="email" type="email" value={form.email} onChange={handleChange} required autoComplete="email" />
+          </div>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label style={labelStyle} htmlFor="password">Password</label>
+            <input style={inputStyle} id="password" name="password" type="password" value={form.password} onChange={handleChange} required autoComplete="current-password" />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '0.8rem',
+              background: loading ? '#1a1a1a' : ORANGE,
+              color: loading ? '#444' : '#000',
+              border: 'none',
+              borderRadius: '4px',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
+      </div>
 
-        <div style={s.field}>
-          <label style={s.label} htmlFor="password">Password</label>
-          <input
-            style={s.input}
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            autoComplete="current-password"
-          />
-        </div>
-
-        <button style={s.btn} type="submit" disabled={loading}>
-          {loading ? 'Signing in…' : 'Sign In'}
-        </button>
-      </form>
-
-      <p style={s.footer}>
-        Don&apos;t have an account? <Link to="/register">Register here</Link>
+      <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.82rem', color: '#555' }}>
+        No account? <Link to="/register" style={{ color: ORANGE, fontWeight: 700 }}>Register here</Link>
       </p>
     </div>
   );

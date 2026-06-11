@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "test": "jest --forceExit --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"]
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -20,6 +25,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.2.2"
   }
 }

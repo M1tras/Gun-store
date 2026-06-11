@@ -1,201 +1,210 @@
-========================================
-  GUN STORE - Jahi- ja relvatarvete e-pood
-========================================
+# 🎯 GUN STORE - Jahi- ja relvatarvete e-pood
 
-REQUIREMENTS
-------------
-  - Node.js v18+
-  - Docker & Docker Compose
-  - npm
+> A modern, full-stack e-commerce platform for hunting and firearm accessories with secure authentication and admin controls.
 
+---
 
-========================================
-  1. START THE DATABASE (Docker)
-========================================
+## ⚡ Quick Start
 
-Start the MySQL database container:
+### Prerequisites
+- **Node.js** v18+
+- **Docker** & Docker Compose
+- **npm**
 
-  docker-compose up -d
+---
 
-Stop the database:
+## 🗄️ Step 1: Start the Database
 
-  docker-compose down
+### Launch MySQL container
+```bash
+docker-compose up -d
+```
 
-The database runs on localhost:3306.
-Credentials are defined in docker-compose.yml:
-  - Database : webshop_jager
-  - User     : app
-  - Password : app_pw
+### Stop the database
+```bash
+docker-compose down
+```
 
+**Database Details:**
+| Setting | Value |
+|---------|-------|
+| **Host** | localhost:3306 |
+| **Database** | webshop_jager |
+| **Username** | app |
+| **Password** | app_pw |
 
-========================================
-  2. BACKEND SETUP
-========================================
+---
 
-Navigate to the backend directory:
+## 🔧 Step 2: Backend Setup
 
-  cd backend
+```bash
+# Navigate to backend
+cd backend
 
-Create the environment file from the example:
+# Create environment file
+cp .env.example .env
 
-  cp .env.example .env
+# Install dependencies
+npm install
 
-Install dependencies:
+# (Optional) Seed database with sample data
+npm run seed
 
-  npm install
+# Start server
+npm start
+```
 
-(Optional) Seed the database with sample products and users:
+**Test Accounts Created by Seed:**
+| Email | Password | Role | Permissions |
+|-------|----------|------|-------------|
+| admin@jager.ee | admin123 | Admin | Full access |
+| user@jager.ee | user123 | User | No gun license |
+| licensed@jager.ee | user123 | User | Has gun license |
 
-  npm run seed
+**API Access:**
+- 🌐 **API**: http://localhost:5000
+- 📚 **Swagger Docs**: http://localhost:5000/api/docs
 
-  Seed creates the following test accounts:
-    admin@jager.ee     / admin123  (role: admin)
-    user@jager.ee      / user123   (role: user, no gun license)
-    licensed@jager.ee  / user123   (role: user, has gun license)
+---
 
-Start the backend server:
+## 🎨 Step 3: Frontend Setup
 
-  npm start
+```bash
+# Navigate to frontend
+cd frontend
 
-The API runs on http://localhost:5000
-Swagger UI is available at http://localhost:5000/api/docs
+# Install dependencies
+npm install
 
+# Start development server
+npm run dev
+```
 
-========================================
-  3. FRONTEND SETUP
-========================================
+**Frontend Access:**
+- 🚀 **App**: http://localhost:5173
 
-Navigate to the frontend directory:
+---
 
-  cd frontend
+## ✅ Step 4: Run Tests
 
-Install dependencies:
+> **⚠️ Requirements**: Database must be running (Step 1)
 
-  npm install
+```bash
+# Navigate to backend
+cd backend
+```
 
-Start the development server:
+### Run All Tests
+```bash
+npm test
+```
 
-  npm run dev
+### Run Specific Test Suite
+```bash
+# Documentation tests (login, password, orders)
+npx jest tests/documentation.test.js --forceExit
 
-The frontend runs on http://localhost:5173
+# All integration tests
+npx jest tests/integration --forceExit
 
+# Individual integration tests
+npx jest tests/integration/auth.integration.test.js --forceExit
+npx jest tests/integration/products.integration.test.js --forceExit
+npx jest tests/integration/orders.integration.test.js --forceExit
+```
 
-========================================
-  4. RUN TESTS
-========================================
+---
 
-All tests are in the backend. Make sure the database
-is running (step 1) before running tests.
+## 📊 Step 5: Test Coverage
 
-  cd backend
+### 🔐 Authentication Tests
+- ✓ Register new account
+- ✓ Login with credentials
+- ✓ Get user profile
+- ✓ Duplicate registration rejected
+- ✓ Protected routes blocked without token
+- ✓ Invalid tokens rejected
 
---- Run all tests (documentation + integration) ---
+### 📦 Product Tests
+- ✓ List all products (public)
+- ✓ Get product by ID
+- ✓ 404 for unknown products
+- ✓ Admin can create/update/delete products
+- ✓ Regular users cannot modify products
 
-  npm test
+### 🛒 Order Tests
+- ✓ Place orders for non-restricted items
+- ✓ Restricted items require gun license + age verification
+- ✓ Licensed adults can order restricted items
+- ✓ Underage users blocked even with license
+- ✓ Admin order management
+- ✓ Order status updates
 
---- Run only documentation tests ---
-  (login, wrong password, order creation)
+---
 
-  npx jest tests/documentation.test.js --forceExit
+## 📁 Step 6: Project Structure
 
---- Run only integration tests ---
+```
+backend/
+├── app.js                    Express app configuration
+├── server.js                 Server entry point
+├── swagger.js                OpenAPI specification
+├── controllers/              Route handlers
+├── middleware/               JWT authentication
+├── models/                   Sequelize ORM models
+├── routes/                   API routes with Swagger docs
+└── tests/
+    ├── documentation.test.js
+    └── integration/
+        ├── auth.integration.test.js
+        ├── products.integration.test.js
+        └── orders.integration.test.js
 
-  npx jest tests/integration --forceExit
+frontend/
+├── src/
+│   ├── api/                  Axios HTTP client
+│   ├── components/           Navbar & UI components
+│   ├── context/              Auth & Cart context
+│   └── pages/                Page components
+├── package.json
+└── vite.config.js
+```
 
---- Run a specific integration test suite ---
+---
 
-  npx jest tests/integration/auth.integration.test.js --forceExit
-  npx jest tests/integration/products.integration.test.js --forceExit
-  npx jest tests/integration/orders.integration.test.js --forceExit
+## 🔌 Step 7: API Endpoints
 
+📖 **Full Interactive Docs**: http://localhost:5000/api/docs
 
-========================================
-  5. INTEGRATION TEST COVERAGE
-========================================
+### 🔐 Authentication
+| Method | Endpoint | Notes |
+|--------|----------|-------|
+| POST | `/api/auth/register` | New user registration |
+| POST | `/api/auth/login` | User login |
+| GET | `/api/auth/me` | Get profile (requires token) |
 
-auth.integration.test.js
-  - Register new account
-  - Login with registered credentials
-  - Get profile of logged-in user
-  - Duplicate registration is rejected
-  - Protected route blocked without token
-  - Protected route blocked with invalid token
+### 📦 Products
+| Method | Endpoint | Permission |
+|--------|----------|------------|
+| GET | `/api/products` | Public |
+| GET | `/api/products/:id` | Public |
+| POST | `/api/products` | Admin only |
+| PUT | `/api/products/:id` | Admin only |
+| DELETE | `/api/products/:id` | Admin only |
 
-products.integration.test.js
-  - List all products (public)
-  - Get single product by ID
-  - 404 for unknown product
-  - Admin can create a product
-  - Admin can update a product
-  - Admin can delete a product
-  - Regular user cannot create a product
-  - Unauthenticated user cannot create a product
+### 🛒 Orders
+| Method | Endpoint | Permission |
+|--------|----------|------------|
+| GET | `/api/orders` | Authenticated users |
+| POST | `/api/orders` | Authenticated users |
+| GET | `/api/orders/admin` | Admin only |
+| PATCH | `/api/orders/:id/status` | Admin only |
 
-orders.integration.test.js
-  - Place order for non-restricted item
-  - Placed order appears in user order list
-  - Unauthenticated user cannot place an order
-  - User without gun license blocked on restricted items
-  - Underage user blocked even with gun license
-  - Licensed adult user can order restricted item
-  - Order with non-existent product returns 404
-  - Empty items array returns 400
-  - Admin can view all orders
-  - Admin can update order status
-  - Invalid status value is rejected
-  - Regular user cannot access admin order list
+### 💚 Health Check
+| Method | Endpoint |
+|--------|----------|
+| GET | `/api/health` |
 
+---
 
-========================================
-  6. PROJECT STRUCTURE
-========================================
-
-  backend/
-    app.js                  Express app (no listen)
-    server.js               Starts the server
-    swagger.js              OpenAPI spec config
-    controllers/            Route handler logic
-    middleware/             JWT auth middleware
-    models/                 Sequelize models
-    routes/                 Express routers with Swagger JSDoc
-    tests/
-      documentation.test.js           3 tests from project docs
-      integration/
-        auth.integration.test.js
-        products.integration.test.js
-        orders.integration.test.js
-
-  frontend/
-    src/
-      api/                  Axios client
-      components/           Navbar
-      context/              Auth and cart context
-      pages/                All page components
-
-
-========================================
-  7. API ENDPOINTS
-========================================
-
-Full interactive docs: http://localhost:5000/api/docs
-
-  Auth
-    POST   /api/auth/register
-    POST   /api/auth/login
-    GET    /api/auth/me              (requires token)
-
-  Products
-    GET    /api/products
-    GET    /api/products/:id
-    POST   /api/products             (admin only)
-    PUT    /api/products/:id         (admin only)
-    DELETE /api/products/:id         (admin only)
-
-  Orders
-    GET    /api/orders               (requires token)
-    POST   /api/orders               (requires token)
-    GET    /api/orders/admin         (admin only)
-    PATCH  /api/orders/:id/status    (admin only)
-
-  Health
-    GET    /api/health
+**Made with ❤️ for Estonian hunters and shooters**

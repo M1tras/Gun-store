@@ -106,7 +106,7 @@ const products = [
     price: 44.99,
     stock: 35,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/Nz9uyRrFdmx7VKVAbnVsPrjN3U7w3xKsv1VzSdLYqaQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFENm1NWW9yMUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/Jp4yz8FHJh1zOo-wnG-j_wzPO4E7xOdKy1bZRHVhvr0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dWx0cmFmaXJlLmNv/bS9jZG4vc2hvcC9m/aWxlcy9VbHRyYUZp/cmVUMVVsdHJhVGFj/dGljYWxMRURGbGFz/aGxpZ2h0LTEwMDBM/TV8xLmpwZz92PTE3/NTE3MDA5NzU",
   },
   {
     name: 'Hunting Rangefinder 1000m',
@@ -114,7 +114,7 @@ const products = [
     price: 219.99,
     stock: 10,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/3RcAVPoJ_5mRnBf-EDSQ1WIEqBBZuV0i_AUZsWBP_1s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFZWTI4eXhhd0wu/anBn",
+    imageUrl: "https://imgs.search.brave.com/PpZJCuSTOkZPBw9Ij1kO617B0AE7UwZxczuLgmPSsjY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/a2VudGZhaXRoLmNv/bS9jYWNoZS9jYXRh/bG9nL3Byb2R1Y3Rz/L3VzL0dXNTYuMDA0/Ni9HVzU2LjAwNDYt/MS01MTh4NTE4Lmpw/Zw",
   },
   {
     name: 'Ghillie Suit',
@@ -122,7 +122,7 @@ const products = [
     price: 74.99,
     stock: 14,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/xSPIxQyqzCHpJn7J0V_CXCNFYfh0FiHm7FQ4-yGS5Ek/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFQd2RiaEpPVUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/1g9iOnIL0h2QYhMN248eEzTFL5KNw3MKBbLFT4tfRII/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ub3J0/aG1vdW50YWluZ2Vh/ci5jb20vY2RuL3No/b3AvcHJvZHVjdHMv/aHlicmlkLWdoaWxs/aWUtc3VpdC13b29k/bGFuZC1icm93bi1u/b3J0aC1tb3VudGFp/bi1nZWFyLTIuanBn/P3Y9MTY4Mjg3NjA0/MiZ3aWR0aD0xMDI0",
   },
   {
     name: 'Handgun 9mm',
@@ -130,7 +130,7 @@ const products = [
     price: 749.99,
     stock: 5,
     isRestricted: true,
-    imageUrl: "https://imgs.search.brave.com/fJCb3xRaOAL8c49Tf3t6_IwRv4R9bKmEKAQKoaMG8Y0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9lL2U0L0ds/b2NrXzE3X3Vuc2Fv/ZWQuanBnLzEyMDBw/eC1HbG9ja18xN191/bnNhb2VkLmpwZw",
+    imageUrl: "https://imgs.search.brave.com/2Q-nelWl5yru48DlRLPUJJQ8XKZj8f65fw0lUOHO2PE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi85bW0t/aGFuZGd1bi1hbW1v/LTI4NDI5NDA1Lmpw/Zw",
   },
   {
     name: 'Hunting Crossbow 175lb',
@@ -138,7 +138,7 @@ const products = [
     price: 389.99,
     stock: 7,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/6jGRK4rJmvEDkRMzAmO3U-K0EklSo8aFSdT3jzW5MO0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFRMXBYaVR0eUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/dwhxQCbtOLp0hrFIFjElsrdl3cFSUpHN9yTiGNQzCDo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFkb3lVVkNZckwu/anBn",
   },
   {
     name: 'Rifle Bipod',
@@ -146,7 +146,7 @@ const products = [
     price: 59.99,
     stock: 22,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/LQsYSY0MxfIg5nYOBhFenCvn4J47_V5FzNKIHrMhx0M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFNZlI3WXo3OUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/rLfnYuyd-oS9hQLgENEOuc3VFvEt5TXaNyolgXYB2iE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93aWxk/ZXJuZXNzdG9kYXku/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDIwLzAzL0NWTElG/RS1UYWN0aWNhbC1S/aWZsZS1CaXBvZC5q/cGc",
   },
   {
     name: 'Night Vision Monocular',
@@ -154,7 +154,7 @@ const products = [
     price: 299.99,
     stock: 6,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/OvHEXRrTw_5YhOIYhkAEMJV-BqvtxFg3cqVh2t-HFg4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFXVFd1b0p0VUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/FDo5OlA260t7FyusvHIG4EHHZaUp5xlbFPchdZANmh8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmVi/YXlpbWcuY29tL2lt/YWdlcy9nLzRmY0FB/ZVN3bG8xcFFoejQv/cy1sNDAwLndlYnA",
   },
   {
     name: 'Hunting Rifle .30-06',
@@ -162,7 +162,7 @@ const products = [
     price: 1099.99,
     stock: 3,
     isRestricted: true,
-    imageUrl: "https://imgs.search.brave.com/7xAIrgfkLbqbA1zTFZHJMYfmFz8Rd39g6sEHJn7bJgk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi8xLzFhL1Np/bW9ub3ZfTW9zaW5f/TmFnYW50LmpwZy8x/MjAwcHgtU2ltb25v/dl9Nb3Npbl9OYWdh/bnQuanBn",
+    imageUrl: "https://imgs.search.brave.com/b_J04onLGr3nT1K_DvvqF1hLamyyW9q_nLwE86tsYHg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BvcnRzbWFucy5j/b20vbWVkaWFzL3Nh/dmFnZS1hcm1zLWF4/aXMtMi14cC1oYXJk/d29vZC0zMC0wNi1z/cHJpbmdmaWVsZC1t/YXR0ZS1ibGFja2hh/cmR3b29kLWJvbHQt/YWN0aW9uLXJpZmxl/LTIyaW4tMTg5Nzc3/NS0xLmpwZz9jb250/ZXh0PWJXRnpkR1Z5/ZkdsdFlXZGxjM3cx/T0RFeWZHbHRZV2Rs/TDJwd1pXZDhZVVJr/YTB3eWFHbE5Remg0/VFdwbmVrNTZSVEZP/UkdNMFRYcEpNazFw/T0hwTlJFRjBXVEk1/ZFdSdFZubGpNbXgy/WW10YWRtTnRNV2hr/UmpscFdWaE9iRXhY/VG5aaWJscHNZMjVP/Y0dJeU5VZGlNMHAw/V1ZoU1ptTXlNVE5N/VkVVMFQxUmpNMDU2/VlhSTlV6VnhZMGRq/ZkRReFptUTFPV1Js/WkRVellqWXpOMlEz/TW1ZME56RTVZV0Uz/TTJRNU4yWm1ZalJq/WVRKa1pXTTNZakZq/WXpnNU1qVTNNbVkz/T0dSa01HTTFOMlpt/WVRV",
   },
   {
     name: 'Ammunition .30-06 (20 rounds)',
@@ -178,7 +178,7 @@ const products = [
     price: 119.99,
     stock: 9,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/XJlgkp2FE8XuRzOGFoexwkQJtFvE0W8cxMKmK8Y11uc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFzOFc2TzVqMkwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/ugzNR2OTxhfQbIkIoldRWIuOzEmVhZ5YziJtkDCKBzA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pNS53/YWxtYXJ0aW1hZ2Vz/LmNvbS9zZW8vVkVW/T1ItSHVudGluZy1C/bGluZC0yNzAtU2Vl/LUdyb3VuZC1CbGlu/ZC0yLTMtUGVyc29u/LVBvcC1EZWVyLUJs/aW5kLUh1bnRpbmct/Q2FycnlpbmctQmFn/LVBvcnRhYmxlLVJl/c2lsaWVudC1IdW50/aW5nLVRlbnQtT25l/LVdheS1TZWUtVGhy/b3VnaC1NZXNoLVR1/cmtfZDNlMDkyN2It/N2YyZC00MTZhLWI5/Y2ItZGIzNDUyYTM4/NWVkLjQ3MWFjYzVj/NjU3OGJlMmJmYmMz/YTM2MGZiNjZmNTU5/LmpwZWc_b2RuSGVp/Z2h0PTMyMCZvZG5X/aWR0aD0zMjAmb2Ru/Qmc9RkZGRkZG",
   },
   {
     name: 'Hunting Gloves',
@@ -186,7 +186,7 @@ const products = [
     price: 22.99,
     stock: 45,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/6K4MbD_rNqRm3HiJakSswcG9CdqAyVFHcpGNF8R1JBw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFvSHVPYWthaUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/ufW7-1GQbTOCZJe1j8mg_XzrTNd4mpvoPzK2h9ryXsA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZS5zcG9ydHNtYW5z/Z3VpZGUuY29tL2Fk/aW1ncy9lLzcvNzE5/NzIyaV90cy5qcGc",
   },
   {
     name: 'Field Dressing Kit',
@@ -194,7 +194,7 @@ const products = [
     price: 37.99,
     stock: 28,
     isRestricted: false,
-    imageUrl: "https://imgs.search.brave.com/mFEkf0VuoqgH1t_yTBEkm3VKmf0NbO7XFoMk6YaBDKQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFQYzFNbU1wdUwu/anBn",
+    imageUrl: "https://imgs.search.brave.com/0ZtITAsT94nckyNmyvTXfS4z9uhFppsXBqg08WffA6o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzgxQ0Z2RDVacDVM/LmpwZw",
   },
 ];
 

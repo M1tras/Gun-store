@@ -38,7 +38,7 @@ module.exports = (sequelize) => {
         },
       },
       imageUrl: {
-        type: DataTypes.STRING(500),
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       isRestricted: {

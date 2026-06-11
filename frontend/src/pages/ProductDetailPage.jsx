@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +10,50 @@ const ORANGE = '#f0a500';
 const SURFACE = '#141414';
 const SURFACE2 = '#1e1e1e';
 const BORDER = '#2a2a2a';
+
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return ReactDOM.createPortal(
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 1000,
+        background: 'rgba(0,0,0,0.93)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        animation: 'toast-in 0.2s ease both',
+      }}
+    >
+      <img
+        src={src} alt={alt}
+        onClick={e => e.stopPropagation()}
+        style={{
+          maxWidth: '92vw', maxHeight: '88vh', objectFit: 'contain',
+          borderRadius: '4px', boxShadow: '0 0 80px rgba(0,0,0,0.8)',
+          animation: 'toast-in 0.25s cubic-bezier(0.4,0,0.2,1) both',
+        }}
+      />
+      <button
+        onClick={onClose}
+        style={{
+          position: 'fixed', top: '1.25rem', right: '1.5rem',
+          background: 'none', border: 'none', color: '#666',
+          fontSize: '1.75rem', cursor: 'pointer', lineHeight: 1, padding: 0,
+          transition: 'color 0.15s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.color = '#eee'}
+        onMouseLeave={e => e.currentTarget.style.color = '#666'}
+      >
+        ✕
+      </button>
+    </div>,
+    document.body
+  );
+}
 
 function Section({ title, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -52,6 +97,8 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
+  const [lightbox, setLightbox] = useState(false);
+  const closeLightbox = useCallback(() => setLightbox(false), []);
 
   useEffect(() => {
     api
@@ -93,8 +140,13 @@ export default function ProductDetailPage() {
 
       {/* Hero image */}
       <div style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', marginBottom: '1.25rem', background: '#111', aspectRatio: '16/9', maxHeight: '340px' }}>
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        {lightbox && product.imageUrl && <Lightbox src={product.imageUrl} alt={product.name} onClose={closeLightbox} />}
+      {product.imageUrl ? (
+          <img
+            src={product.imageUrl} alt={product.name}
+            onClick={() => setLightbox(true)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
+          />
         ) : (
           <div style={{ width: '100%', height: '100%', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             No image available

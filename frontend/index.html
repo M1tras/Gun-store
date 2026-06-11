@@ -11,10 +11,23 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background: #0d0d0d;
         color: #ffffff;
+        overflow-x: hidden;
       }
       a { color: inherit; }
       input, select, textarea {
         color-scheme: dark;
+      }
+      @keyframes skeleton-pulse {
+        0% { background-position: 200% center; }
+        100% { background-position: -200% center; }
+      }
+      @keyframes toast-in {
+        from { transform: translateY(16px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+      @keyframes toast-out {
+        from { transform: translateY(0);    opacity: 1; }
+        to   { transform: translateY(16px); opacity: 0; }
       }
     </style>
   </head>

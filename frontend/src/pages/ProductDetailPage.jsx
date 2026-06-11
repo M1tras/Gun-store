@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 
 const ORANGE = '#f0a500';
 const SURFACE = '#141414';
@@ -45,11 +46,11 @@ export default function ProductDetailPage() {
   const navigate = useNavigate();
 
   const { addItem, items } = useCart();
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null);
   const [fetchError, setFetchError] = useState('');
 
   useEffect(() => {
@@ -64,16 +65,13 @@ export default function ProductDetailPage() {
     const inCart = items.find((i) => i.productId === product.id)?.quantity || 0;
     const available = product.stock - inCart;
     if (quantity > available) {
-      setMessage({
-        type: 'error',
-        text: available === 0
-          ? `No more available — you already have the full stock in your cart.`
-          : `Only ${available} more available (${inCart} already in cart).`,
-      });
+      showToast('error', available === 0
+        ? `No more available — you already have the full stock in your cart.`
+        : `Only ${available} more available (${inCart} already in cart).`);
       return;
     }
     addItem(product, quantity);
-    setMessage({ type: 'success', text: `Added ${quantity} × "${product.name}" to loadout.` });
+    showToast('success', `${quantity} × "${product.name}" added to loadout`);
   };
 
   const canBuyRestricted = user && user.hasGunLicense && user.age >= 18;
@@ -144,22 +142,6 @@ export default function ProductDetailPage() {
         {product.isRestricted && user && user.hasGunLicense && user.age < 18 && (
           <div style={{ borderLeft: '3px solid #e74c3c', paddingLeft: '0.75rem', marginBottom: '1rem', fontSize: '0.82rem', color: '#888', lineHeight: 1.6 }}>
             Must be 18+ to purchase restricted items.
-          </div>
-        )}
-
-        {message && (
-          <div style={{
-            borderLeft: `3px solid ${message.type === 'success' ? '#4caf50' : '#e74c3c'}`,
-            paddingLeft: '0.75rem',
-            marginBottom: '1rem',
-            fontSize: '0.82rem',
-            color: message.type === 'success' ? '#4caf50' : '#e74c3c',
-            lineHeight: 1.6,
-          }}>
-            {message.text}
-            {message.type === 'success' && (
-              <> · <Link to="/cart" style={{ color: ORANGE }}>View loadout →</Link></>
-            )}
           </div>
         )}
 

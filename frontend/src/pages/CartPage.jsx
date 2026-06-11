@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import SwipeToRemove from '../components/SwipeToRemove';
 import api from '../api/axios';
 
 const ORANGE = '#f0a500';
@@ -12,36 +14,39 @@ const BORDER = '#2a2a2a';
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const [ordering, setOrdering] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [checkoutMsg, setCheckoutMsg] = useState(null);
 
   const hasRestricted = items.some((i) => i.isRestricted);
   const canBuyRestricted = user && user.hasGunLicense && user.age >= 18;
   const checkoutBlocked = hasRestricted && (!user || !canBuyRestricted);
 
   const handleCheckout = async () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    setMessage(null);
+    if (!user) { navigate('/login'); return; }
+    setCheckoutMsg(null);
     setOrdering(true);
     try {
       await api.post('/api/orders', {
         items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
       });
       clearCart();
-      setMessage({ type: 'success', text: 'Order placed successfully!' });
+      setCheckoutMsg({ type: 'success', text: 'Order placed! View it in My Orders.' });
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to place order.' });
+      setCheckoutMsg({ type: 'error', text: err.response?.data?.message || 'Failed to place order.' });
     } finally {
       setOrdering(false);
     }
   };
 
-  if (items.length === 0 && !message) {
+  const handleRemove = (item) => {
+    removeItem(item.productId);
+    showToast('info', `"${item.name}" removed from loadout`);
+  };
+
+  if (items.length === 0 && !checkoutMsg) {
     return (
       <div>
         <div style={{ marginBottom: '1.25rem' }}>
@@ -59,9 +64,6 @@ export default function CartPage() {
     );
   }
 
-  const shipping = 0;
-  const discount = 0;
-
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.25rem' }}>
@@ -76,16 +78,15 @@ export default function CartPage() {
         )}
       </div>
 
-      {message && (
+      {checkoutMsg && (
         <div style={{
-          borderLeft: `3px solid ${message.type === 'success' ? '#4caf50' : '#e74c3c'}`,
-          paddingLeft: '0.75rem',
-          marginBottom: '1rem',
+          borderLeft: `3px solid ${checkoutMsg.type === 'success' ? '#4caf50' : '#e74c3c'}`,
+          paddingLeft: '0.75rem', marginBottom: '1rem',
           fontSize: '0.85rem',
-          color: message.type === 'success' ? '#4caf50' : '#e74c3c',
+          color: checkoutMsg.type === 'success' ? '#4caf50' : '#e74c3c',
         }}>
-          {message.text}
-          {message.type === 'success' && (
+          {checkoutMsg.text}
+          {checkoutMsg.type === 'success' && (
             <> · <Link to="/orders" style={{ color: ORANGE }}>View orders →</Link></>
           )}
         </div>
@@ -104,51 +105,48 @@ export default function CartPage() {
 
       {items.length > 0 && (
         <>
-          {/* Item list */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
             {items.map((item) => (
-              <div key={item.productId} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '0.85rem', display: 'flex', gap: '0.85rem', alignItems: 'center' }}>
-                {/* Thumbnail */}
-                <div style={{ width: 60, height: 60, borderRadius: '6px', overflow: 'hidden', background: '#111', flexShrink: 0 }}>
-                  {item.imageUrl ? (
-                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333', fontSize: '0.6rem' }}>N/A</div>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <Link to={`/products/${item.productId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
-                  </Link>
-                  <div style={{ fontSize: '0.65rem', color: '#444', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '0.1rem' }}>
-                    SKU: PRD-{String(item.productId).padStart(4, '0')}
-                    {item.isRestricted && <span style={{ color: ORANGE, marginLeft: '0.5rem' }}>· License Req.</span>}
+              <SwipeToRemove key={item.productId} onRemove={() => handleRemove(item)}>
+                <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '0.85rem', display: 'flex', gap: '0.85rem', alignItems: 'center' }}>
+                  {/* Thumbnail */}
+                  <div style={{ width: 60, height: 60, borderRadius: '6px', overflow: 'hidden', background: '#111', flexShrink: 0 }}>
+                    {item.imageUrl ? (
+                      <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333', fontSize: '0.6rem' }}>N/A</div>
+                    )}
                   </div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', marginTop: '0.3rem' }}>€{item.price.toFixed(2)}</div>
-                </div>
 
-                {/* Qty stepper */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', background: SURFACE2, border: `1px solid ${BORDER}`, borderRadius: '4px', overflow: 'hidden' }}>
-                    <button
-                      onClick={() => item.quantity <= 1 ? removeItem(item.productId) : updateQuantity(item.productId, item.quantity - 1)}
-                      style={{ width: 28, height: 28, background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      −
-                    </button>
-                    <span style={{ width: 28, textAlign: 'center', fontWeight: 700, fontSize: '0.85rem' }}>{item.quantity}</span>
-                    <button
-                      onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                      style={{ width: 28, height: 28, background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      +
-                    </button>
+                  {/* Info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <Link to={`/products/${item.productId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
+                    </Link>
+                    <div style={{ fontSize: '0.65rem', color: '#444', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '0.1rem' }}>
+                      SKU: PRD-{String(item.productId).padStart(4, '0')}
+                      {item.isRestricted && <span style={{ color: ORANGE, marginLeft: '0.5rem' }}>· License Req.</span>}
+                    </div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', marginTop: '0.3rem' }}>€{item.price.toFixed(2)}</div>
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: '#888', fontWeight: 600 }}>€{(item.price * item.quantity).toFixed(2)}</div>
+
+                  {/* Qty stepper */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', background: SURFACE2, border: `1px solid ${BORDER}`, borderRadius: '4px', overflow: 'hidden' }}>
+                      <button
+                        onClick={() => item.quantity <= 1 ? handleRemove(item) : updateQuantity(item.productId, item.quantity - 1)}
+                        style={{ width: 28, height: 28, background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >−</button>
+                      <span style={{ width: 28, textAlign: 'center', fontWeight: 700, fontSize: '0.85rem' }}>{item.quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        style={{ width: 28, height: 28, background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >+</button>
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#888', fontWeight: 600 }}>€{(item.price * item.quantity).toFixed(2)}</div>
+                  </div>
                 </div>
-              </div>
+              </SwipeToRemove>
             ))}
           </div>
 
@@ -157,13 +155,8 @@ export default function CartPage() {
             <div style={{ fontSize: '0.6rem', letterSpacing: '0.2em', color: '#555', textTransform: 'uppercase', fontWeight: 700, marginBottom: '1rem' }}>
               Transaction Summary
             </div>
-
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem' }}>
-              {[
-                ['Subtotal', `€${totalPrice.toFixed(2)}`],
-                ['Discount', discount === 0 ? '—' : `-€${discount.toFixed(2)}`],
-                ['Shipping', shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`],
-              ].map(([label, value]) => (
+              {[['Subtotal', `€${totalPrice.toFixed(2)}`], ['Discount', '—'], ['Shipping', 'Free']].map(([label, value]) => (
                 <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem' }}>
                   <span style={{ color: '#555', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '0.7rem' }}>{label}</span>
                   <span style={{ color: '#aaa' }}>{value}</span>
@@ -179,21 +172,13 @@ export default function CartPage() {
               onClick={handleCheckout}
               disabled={checkoutBlocked || ordering}
               style={{
-                width: '100%',
-                padding: '0.9rem',
+                width: '100%', padding: '0.9rem',
                 background: checkoutBlocked || ordering ? '#1a1a1a' : ORANGE,
                 color: checkoutBlocked || ordering ? '#444' : '#000',
-                border: 'none',
-                borderRadius: '4px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
+                border: 'none', borderRadius: '4px', fontWeight: 800,
+                fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase',
                 cursor: checkoutBlocked || ordering ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               }}
             >
               <span>🔒</span>

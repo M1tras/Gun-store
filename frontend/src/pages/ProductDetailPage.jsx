@@ -4,104 +4,40 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
-const s = {
-  card: {
-    background: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    overflow: 'hidden',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: 0,
-  },
-  img: { width: '100%', height: '360px', objectFit: 'cover', display: 'block', background: '#eee' },
-  imgPlaceholder: {
-    width: '100%',
-    height: '360px',
-    background: '#e0e0e0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#aaa',
-    fontSize: '1rem',
-  },
-  info: { padding: '2rem', display: 'flex', flexDirection: 'column' },
-  name: { margin: '0 0 0.5rem', fontSize: '1.5rem', fontWeight: 700 },
-  badge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.3rem',
-    background: '#fff3cd',
-    color: '#856404',
-    border: '1px solid #ffc107',
-    borderRadius: '4px',
-    padding: '0.25rem 0.6rem',
-    fontSize: '0.8rem',
-    fontWeight: 600,
-    marginBottom: '1rem',
-    width: 'fit-content',
-  },
-  price: { fontSize: '1.75rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '0.5rem' },
-  stock: { color: '#555', fontSize: '0.9rem', marginBottom: '1.5rem' },
-  desc: { color: '#555', lineHeight: 1.6, marginBottom: '1.5rem', flex: 1 },
-  qtyRow: { display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' },
-  qtyInput: {
-    width: '70px',
-    padding: '0.5rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    textAlign: 'center',
-  },
-  btn: {
-    padding: '0.75rem 1.75rem',
-    background: '#1a1a1a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    fontSize: '1rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-  },
-  btnDisabled: {
-    padding: '0.75rem 1.75rem',
-    background: '#aaa',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    fontSize: '1rem',
-    fontWeight: 600,
-    cursor: 'not-allowed',
-  },
-  warn: {
-    background: '#fff8e1',
-    borderLeft: '4px solid #f0a500',
-    padding: '0.75rem 1rem',
-    borderRadius: '4px',
-    fontSize: '0.88rem',
-    color: '#555',
-    marginBottom: '1rem',
-  },
-  success: {
-    background: '#d4edda',
-    border: '1px solid #c3e6cb',
-    borderRadius: '4px',
-    padding: '0.6rem 0.75rem',
-    color: '#155724',
-    marginBottom: '1rem',
-    fontSize: '0.9rem',
-  },
-  error: {
-    background: '#fdecea',
-    border: '1px solid #f5c6cb',
-    borderRadius: '4px',
-    padding: '0.6rem 0.75rem',
-    color: '#721c24',
-    marginBottom: '1rem',
-    fontSize: '0.9rem',
-  },
-  back: { display: 'inline-block', marginBottom: '1rem', color: '#555', fontSize: '0.9rem', textDecoration: 'none' },
-};
+const ORANGE = '#f0a500';
+const SURFACE = '#141414';
+const SURFACE2 = '#1e1e1e';
+const BORDER = '#2a2a2a';
+
+function Section({ title, children, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div style={{ borderBottom: `1px solid ${BORDER}` }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem 0',
+          background: 'none',
+          border: 'none',
+          color: '#aaa',
+          cursor: 'pointer',
+          fontSize: '0.7rem',
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          fontWeight: 700,
+        }}
+      >
+        <span>{title}</span>
+        <span style={{ color: open ? ORANGE : '#444', fontSize: '1.1rem', lineHeight: 1 }}>{open ? '−' : '+'}</span>
+      </button>
+      {open && <div style={{ paddingBottom: '1rem' }}>{children}</div>}
+    </div>
+  );
+}
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -113,7 +49,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null); // { type: 'success'|'error', text }
+  const [message, setMessage] = useState(null);
   const [fetchError, setFetchError] = useState('');
 
   useEffect(() => {
@@ -131,20 +67,19 @@ export default function ProductDetailPage() {
       setMessage({
         type: 'error',
         text: available === 0
-          ? `No more "${product.name}" available — you already have the full stock in your cart.`
-          : `Only ${available} more available for "${product.name}" (${inCart} already in cart).`,
+          ? `No more available — you already have the full stock in your cart.`
+          : `Only ${available} more available (${inCart} already in cart).`,
       });
       return;
     }
     addItem(product, quantity);
-    setMessage({ type: 'success', text: `Added ${quantity} × "${product.name}" to cart.` });
+    setMessage({ type: 'success', text: `Added ${quantity} × "${product.name}" to loadout.` });
   };
 
-  // Determine if the user can purchase a restricted item
   const canBuyRestricted = user && user.hasGunLicense && user.age >= 18;
 
-  if (loading) return <p>Loading…</p>;
-  if (fetchError) return <p style={{ color: '#c0392b' }}>{fetchError}</p>;
+  if (loading) return <p style={{ color: '#666', padding: '2rem 0' }}>Loading…</p>;
+  if (fetchError) return <p style={{ color: '#e74c3c' }}>{fetchError}</p>;
   if (!product) return null;
 
   const cartQty = items.find((i) => i.productId === product.id)?.quantity || 0;
@@ -154,93 +89,147 @@ export default function ProductDetailPage() {
 
   return (
     <div>
-      <Link to="/products" style={s.back}>← Back to products</Link>
+      <Link to="/products" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#555', fontSize: '0.75rem', textDecoration: 'none', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem' }}>
+        ← Back
+      </Link>
 
-      <div style={s.card}>
+      {/* Hero image */}
+      <div style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', marginBottom: '1.25rem', background: '#111', aspectRatio: '16/9', maxHeight: '340px' }}>
         {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} style={s.img} />
+          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         ) : (
-          <div style={s.imgPlaceholder}>No image available</div>
+          <div style={{ width: '100%', height: '100%', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            No image available
+          </div>
+        )}
+        {/* Gradient overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%)' }} />
+        {/* Title on image */}
+        <div style={{ position: 'absolute', bottom: '1.25rem', left: '1.25rem', right: '1.25rem' }}>
+          {product.isRestricted && (
+            <span style={{ display: 'inline-block', background: 'rgba(240,165,0,0.15)', color: ORANGE, border: `1px solid rgba(240,165,0,0.3)`, borderRadius: '3px', padding: '0.15rem 0.5rem', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              License Required
+            </span>
+          )}
+          <h1 style={{ margin: 0, fontSize: 'clamp(1.2rem, 4vw, 1.75rem)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+            {product.name}
+          </h1>
+        </div>
+      </div>
+
+      {/* Price + stock row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        <span style={{ fontSize: '1.75rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>
+          €{parseFloat(product.price).toFixed(2)}
+        </span>
+        <span style={{ fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: product.stock === 0 ? '#e74c3c' : '#555' }}>
+          {product.stock === 0 ? 'Out of stock' : outOfStock ? 'All stock in cart' : `${availableStock} in stock`}
+          {cartQty > 0 && product.stock > 0 && !outOfStock && ` · ${cartQty} in cart`}
+        </span>
+      </div>
+
+      {/* Action area */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1.25rem', marginBottom: '1.25rem' }}>
+        {/* Restriction warnings */}
+        {product.isRestricted && !user && (
+          <div style={{ borderLeft: `3px solid ${ORANGE}`, paddingLeft: '0.75rem', marginBottom: '1rem', fontSize: '0.82rem', color: '#888', lineHeight: 1.6 }}>
+            Restricted item. <Link to="/login" style={{ color: ORANGE }}>Sign in</Link> with a verified gun license to purchase.
+          </div>
+        )}
+        {product.isRestricted && user && !user.hasGunLicense && (
+          <div style={{ borderLeft: '3px solid #e74c3c', paddingLeft: '0.75rem', marginBottom: '1rem', fontSize: '0.82rem', color: '#888', lineHeight: 1.6 }}>
+            A valid gun license is required. Your account does not have one on record.
+          </div>
+        )}
+        {product.isRestricted && user && user.hasGunLicense && user.age < 18 && (
+          <div style={{ borderLeft: '3px solid #e74c3c', paddingLeft: '0.75rem', marginBottom: '1rem', fontSize: '0.82rem', color: '#888', lineHeight: 1.6 }}>
+            Must be 18+ to purchase restricted items.
+          </div>
         )}
 
-        <div style={s.info}>
-          <h1 style={s.name}>{product.name}</h1>
-
-          {product.isRestricted && (
-            <div style={s.badge}>
-              <span>🔒</span> Licensed firearms/restricted item
-            </div>
-          )}
-
-          <div style={s.price}>€{parseFloat(product.price).toFixed(2)}</div>
-          <div style={s.stock}>
-            {product.stock === 0 ? (
-              <span style={{ color: '#c0392b', fontWeight: 600 }}>Out of stock</span>
-            ) : outOfStock ? (
-              <span style={{ color: '#c0392b', fontWeight: 600 }}>
-                All {product.stock} in stock are in your cart
-              </span>
-            ) : (
-              <span>
-                {availableStock} in stock{cartQty > 0 && ` (${cartQty} already in cart)`}
-              </span>
+        {message && (
+          <div style={{
+            borderLeft: `3px solid ${message.type === 'success' ? '#4caf50' : '#e74c3c'}`,
+            paddingLeft: '0.75rem',
+            marginBottom: '1rem',
+            fontSize: '0.82rem',
+            color: message.type === 'success' ? '#4caf50' : '#e74c3c',
+            lineHeight: 1.6,
+          }}>
+            {message.text}
+            {message.type === 'success' && (
+              <> · <Link to="/cart" style={{ color: ORANGE }}>View loadout →</Link></>
             )}
           </div>
+        )}
 
-          {product.description && <p style={s.desc}>{product.description}</p>}
-
-          {/* Warnings for restricted item access */}
-          {product.isRestricted && !user && (
-            <div style={s.warn}>
-              This is a restricted item. Please <Link to="/login">sign in</Link> with a verified gun
-              license to purchase.
+        {!purchaseBlocked && !outOfStock && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <span style={{ fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', fontWeight: 700 }}>Qty</span>
+            <div style={{ display: 'flex', alignItems: 'center', background: SURFACE2, border: `1px solid ${BORDER}`, borderRadius: '4px', overflow: 'hidden' }}>
+              <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} style={{ width: 36, height: 36, background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+              <span style={{ width: 36, textAlign: 'center', fontWeight: 700, fontSize: '0.95rem' }}>{quantity}</span>
+              <button onClick={() => setQuantity((q) => Math.min(availableStock, q + 1))} style={{ width: 36, height: 36, background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
             </div>
-          )}
-          {product.isRestricted && user && !user.hasGunLicense && (
-            <div style={s.warn}>
-              A valid gun license is required to purchase this item. Your account does not have a
-              gun license on record.
-            </div>
-          )}
-          {product.isRestricted && user && user.hasGunLicense && user.age < 18 && (
-            <div style={s.warn}>
-              You must be 18 years or older to purchase restricted items.
-            </div>
-          )}
+          </div>
+        )}
 
-          {message && (
-            <div style={message.type === 'success' ? s.success : s.error}>{message.text}</div>
-          )}
+        <button
+          onClick={handleAddToCart}
+          disabled={purchaseBlocked || outOfStock}
+          style={{
+            width: '100%',
+            padding: '0.85rem',
+            background: purchaseBlocked || outOfStock ? '#1a1a1a' : ORANGE,
+            color: purchaseBlocked || outOfStock ? '#444' : '#000',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: 800,
+            fontSize: '0.85rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            cursor: purchaseBlocked || outOfStock ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {outOfStock ? 'Out of Stock' : purchaseBlocked ? 'License Required' : 'Add to Loadout'}
+        </button>
+      </div>
 
-          {!purchaseBlocked && !outOfStock && (
-            <div style={s.qtyRow}>
-              <label style={{ fontWeight: 500 }}>Qty:</label>
-              <input
-                style={s.qtyInput}
-                type="number"
-                min="1"
-                max={availableStock}
-                value={quantity}
-                onChange={(e) =>
-                  setQuantity(Math.min(Math.max(1, parseInt(e.target.value) || 1), availableStock))
-                }
-              />
-            </div>
+      {/* Accordion sections */}
+      <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '0 1.25rem' }}>
+        <Section title="Information" defaultOpen={true}>
+          {product.description ? (
+            <p style={{ margin: 0, color: '#888', fontSize: '0.88rem', lineHeight: 1.7 }}>{product.description}</p>
+          ) : (
+            <p style={{ margin: 0, color: '#444', fontSize: '0.85rem' }}>No description available.</p>
           )}
+        </Section>
 
-          <button
-            style={purchaseBlocked || outOfStock ? s.btnDisabled : s.btn}
-            onClick={handleAddToCart}
-            disabled={purchaseBlocked || outOfStock}
-          >
-            {outOfStock ? 'Out of Stock' : 'Add to Cart'}
-          </button>
-          {!purchaseBlocked && !outOfStock && (
-            <Link to="/cart" style={{ marginTop: '0.5rem', fontSize: '0.88rem', color: '#555', display: 'inline-block' }}>
-              View cart →
-            </Link>
-          )}
-        </div>
+        <Section title="Specifications">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', fontSize: '0.8rem' }}>
+            {[
+              ['SKU', `PRD-${String(product.id).padStart(4, '0')}`],
+              ['Status', product.stock > 0 ? 'In Stock' : 'Unavailable'],
+              ['Type', product.isRestricted ? 'Restricted' : 'Standard'],
+              ['Price', `€${parseFloat(product.price).toFixed(2)}`],
+            ].map(([k, v]) => (
+              <React.Fragment key={k}>
+                <div style={{ padding: '0.6rem 0', color: '#555', letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.65rem', fontWeight: 700, borderBottom: `1px solid #1a1a1a` }}>{k}</div>
+                <div style={{ padding: '0.6rem 0', color: '#ccc', borderBottom: `1px solid #1a1a1a`, textAlign: 'right' }}>{v}</div>
+              </React.Fragment>
+            ))}
+          </div>
+        </Section>
+
+        <Section title="Purchasing Info">
+          <div style={{ fontSize: '0.82rem', color: '#666', lineHeight: 1.7 }}>
+            {product.isRestricted ? (
+              <>This is a <span style={{ color: ORANGE }}>restricted item</span>. A valid firearms license and minimum age of 18 are required for purchase. Verification is performed at checkout.</>
+            ) : (
+              <>This item is available for purchase without special licensing requirements. Add to your loadout and proceed to checkout when ready.</>
+            )}
+          </div>
+        </Section>
       </div>
     </div>
   );

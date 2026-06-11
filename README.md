@@ -1,10 +1,10 @@
-# 🎯 GUN STORE - Jahi- ja relvatarvete e-pood
+# GUN STORE - Jahi- ja relvatarvete e-pood
 
 > A modern, full-stack e-commerce platform for hunting and firearm accessories with secure authentication and admin controls.
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Node.js** v18+
@@ -62,8 +62,8 @@ npm start
 | licensed@jager.ee | user123 | User | Has gun license |
 
 **API Access:**
-- 🌐 **API**: http://localhost:5000
-- 📚 **Swagger Docs**: http://localhost:5000/api/docs
+-  **API**: http://localhost:5000
+-  **Swagger Docs**: http://localhost:5000/api/docs
 
 ---
 
@@ -81,13 +81,13 @@ npm run dev
 ```
 
 **Frontend Access:**
-- 🚀 **App**: http://localhost:5173
+-  **App**: http://localhost:3000
 
 ---
 
-## ✅ Step 4: Run Tests
+##  Step 4: Run Tests
 
-> **⚠️ Requirements**: Database must be running (Step 1)
+> ** Requirements**: Database must be running (Step 1)
 
 ```bash
 # Navigate to backend
@@ -115,9 +115,9 @@ npx jest tests/integration/orders.integration.test.js --forceExit
 
 ---
 
-## 📊 Step 5: Test Coverage
+##  Step 5: Test Coverage
 
-### 🔐 Authentication Tests
+###  Authentication Tests
 - ✓ Register new account
 - ✓ Login with credentials
 - ✓ Get user profile
@@ -125,14 +125,14 @@ npx jest tests/integration/orders.integration.test.js --forceExit
 - ✓ Protected routes blocked without token
 - ✓ Invalid tokens rejected
 
-### 📦 Product Tests
+###  Product Tests
 - ✓ List all products (public)
 - ✓ Get product by ID
 - ✓ 404 for unknown products
 - ✓ Admin can create/update/delete products
 - ✓ Regular users cannot modify products
 
-### 🛒 Order Tests
+###  Order Tests
 - ✓ Place orders for non-restricted items
 - ✓ Restricted items require gun license + age verification
 - ✓ Licensed adults can order restricted items
@@ -142,7 +142,7 @@ npx jest tests/integration/orders.integration.test.js --forceExit
 
 ---
 
-## 📁 Step 6: Project Structure
+##  Step 6: Project Structure
 
 ```
 backend/
@@ -172,18 +172,18 @@ frontend/
 
 ---
 
-## 🔌 Step 7: API Endpoints
+##  Step 7: API Endpoints
 
-📖 **Full Interactive Docs**: http://localhost:5000/api/docs
+ **Full Interactive Docs**: http://localhost:5000/api/docs
 
-### 🔐 Authentication
+###  Authentication
 | Method | Endpoint | Notes |
 |--------|----------|-------|
 | POST | `/api/auth/register` | New user registration |
 | POST | `/api/auth/login` | User login |
 | GET | `/api/auth/me` | Get profile (requires token) |
 
-### 📦 Products
+###  Products
 | Method | Endpoint | Permission |
 |--------|----------|------------|
 | GET | `/api/products` | Public |
@@ -192,7 +192,7 @@ frontend/
 | PUT | `/api/products/:id` | Admin only |
 | DELETE | `/api/products/:id` | Admin only |
 
-### 🛒 Orders
+###  Orders
 | Method | Endpoint | Permission |
 |--------|----------|------------|
 | GET | `/api/orders` | Authenticated users |
@@ -200,7 +200,7 @@ frontend/
 | GET | `/api/orders/admin` | Admin only |
 | PATCH | `/api/orders/:id/status` | Admin only |
 
-### 💚 Health Check
+###  Health Check
 | Method | Endpoint |
 |--------|----------|
 | GET | `/api/health` |

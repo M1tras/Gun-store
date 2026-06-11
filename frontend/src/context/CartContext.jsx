@@ -41,7 +41,7 @@ export function CartProvider({ children }) {
           isRestricted: product.isRestricted,
           stock: product.stock,
           imageUrl: product.imageUrl || null,
-          quantity,
+          quantity: Math.min(quantity, product.stock),
         },
       ];
     });

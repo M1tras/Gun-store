@@ -65,6 +65,10 @@ npm start
 -  **API**: http://localhost:5000
 -  **Swagger Docs**: http://localhost:5000/api/docs
 
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@jager.ee","password":"admin123"}'
+
 ---
 
 ## Step 3: Frontend Setup

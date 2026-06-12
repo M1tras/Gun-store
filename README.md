@@ -65,9 +65,7 @@ npm start
 -  **API**: http://localhost:5000
 -  **Swagger Docs**: http://localhost:5000/api/docs
 
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@jager.ee","password":"admin123"}'
+curl -X POST http://localhost:5000/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@jager.ee","password":"admin123"}'
 
 ---
 
@@ -122,27 +120,27 @@ npx jest tests/integration/orders.integration.test.js --forceExit
 ##  Step 5: Test Coverage
 
 ###  Authentication Tests
-- ✓ Register new account
-- ✓ Login with credentials
-- ✓ Get user profile
-- ✓ Duplicate registration rejected
-- ✓ Protected routes blocked without token
-- ✓ Invalid tokens rejected
+- Register new account
+- Login with credentials
+- Get user profile
+- Duplicate registration rejected
+- Protected routes blocked without token
+- Invalid tokens rejected
 
 ###  Product Tests
-- ✓ List all products (public)
-- ✓ Get product by ID
-- ✓ 404 for unknown products
-- ✓ Admin can create/update/delete products
-- ✓ Regular users cannot modify products
+- List all products (public)
+- Get product by ID
+- 404 for unknown products
+- Admin can create/update/delete products
+- Regular users cannot modify products
 
 ###  Order Tests
-- ✓ Place orders for non-restricted items
-- ✓ Restricted items require gun license + age verification
-- ✓ Licensed adults can order restricted items
-- ✓ Underage users blocked even with license
-- ✓ Admin order management
-- ✓ Order status updates
+- Place orders for non-restricted items
+- Restricted items require gun license + age verification
+- Licensed adults can order restricted items
+- Underage users blocked even with license
+- Admin order management
+- Order status updates
 
 ---
 

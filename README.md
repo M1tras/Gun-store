@@ -13,7 +13,7 @@
 
 ---
 
-## 🗄️ Step 1: Start the Database
+## Step 1: Start the Database
 
 ### Launch MySQL container
 ```bash
@@ -35,7 +35,7 @@ docker-compose down
 
 ---
 
-## 🔧 Step 2: Backend Setup
+## Step 2: Backend Setup
 
 ```bash
 # Navigate to backend
@@ -67,7 +67,7 @@ npm start
 
 ---
 
-## 🎨 Step 3: Frontend Setup
+## Step 3: Frontend Setup
 
 ```bash
 # Navigate to frontend
@@ -204,7 +204,4 @@ frontend/
 | Method | Endpoint |
 |--------|----------|
 | GET | `/api/health` |
-
 ---
-
-**Made with ❤️ for Estonian hunters and shooters**
